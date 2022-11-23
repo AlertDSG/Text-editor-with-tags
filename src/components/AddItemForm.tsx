@@ -1,6 +1,7 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import {TextField} from "./TextField";
-import {Button} from "./Button";
+import css from './AddItemForm.module.scss'
+import {TextField} from './TextField';
+import {Button} from './Button';
 
 type AddItemFormType = {
     onClickSet: (value: string) => void
@@ -26,11 +27,19 @@ export const AddItemForm: React.FC<AddItemFormType> = ({onClickSet}) => {
         }
     }
 
-    return <>
+    return <div className={css.itemForm}>
         <TextField
             onChange={onChangeHandler}
             onKeyPress={onKeyPressHandler}
-            value={value}/>
-        <Button name={'Add todo'} onClickHandler={onClickHandler}/>
-    </>
+            value={value}
+            className={css.input}
+            placeholder={'Add todo'}
+        />
+        <Button
+            name={'Add todo'}
+            onClickHandler={onClickHandler}
+            className={value === '' ? css.btnDisabled : css.btn}
+            disabled={value === ''}
+        />
+    </div>
 };

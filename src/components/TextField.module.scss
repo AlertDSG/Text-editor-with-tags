@@ -1,0 +1,7 @@
+.textField{
+  outline: none;
+  background: transparent;
+  &:focus{
+    outline: none;
+  }
+}

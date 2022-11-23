@@ -1,6 +1,7 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
-import {TextField} from "./TextField";
-import {useDebounce} from "../hooks/useDebounce";
+import css from './SearchItemForm.module.scss';
+import {TextField} from './TextField';
+import {useDebounce} from '../common/hooks/useDebounce';
 
 type SearchItemFormType = {
     onChange: (value: string) => void
@@ -16,9 +17,14 @@ export const SearchItemForm: React.FC<SearchItemFormType> = ({onChange}) => {
 
     useEffect(() => {
         onChange(debounce)
-    },[debounce, onChange])
+    }, [debounce, onChange])
 
     return (
-        <TextField onChange={onChangeHandler} value={value}/>
+        <TextField
+            onChange={onChangeHandler}
+            value={value}
+            className={css.input}
+            placeholder={'Search by tag'}
+        />
     );
 };
