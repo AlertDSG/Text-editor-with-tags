@@ -31,7 +31,7 @@ function App() {
 
     useEffect(() => {
         const localState = localStorage.getItem('state')
-        if(localState){
+        if (localState) {
             setState(JSON.parse(localState))
         }
     }, [])
