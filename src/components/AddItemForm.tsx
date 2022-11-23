@@ -7,7 +7,7 @@ type AddItemFormType = {
     onClickSet: (value: string) => void
 }
 
-export const AddItemForm: React.FC<AddItemFormType> = ({onClickSet}) => {
+export const AddItemForm: React.FC<AddItemFormType> = React.memo(({onClickSet}) => {
     const [value, setValue] = useState('')
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -42,4 +42,4 @@ export const AddItemForm: React.FC<AddItemFormType> = ({onClickSet}) => {
             disabled={value === ''}
         />
     </div>
-};
+});

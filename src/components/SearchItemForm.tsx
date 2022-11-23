@@ -7,7 +7,7 @@ type SearchItemFormType = {
     onChange: (value: string) => void
 }
 
-export const SearchItemForm: React.FC<SearchItemFormType> = ({onChange}) => {
+export const SearchItemForm: React.FC<SearchItemFormType> = React.memo(({onChange}) => {
     const [value, setValue] = useState('')
     const debounce = useDebounce(value, 1000)
 
@@ -27,4 +27,4 @@ export const SearchItemForm: React.FC<SearchItemFormType> = ({onChange}) => {
             placeholder={'Search by tag'}
         />
     );
-};
+});
