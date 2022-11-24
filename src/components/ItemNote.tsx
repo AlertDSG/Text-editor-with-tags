@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import css from './ItemNote.module.scss';
 import {DataType} from '../App';
 import {TextField} from './TextField';
@@ -12,15 +12,15 @@ type ItemType = {
     colorHandler: (value: string) => void
 }
 
-export const ItemNote: React.FC<ItemType> = ({item, onChange, removeItem, colorHandler}) => {
+export const ItemNote: React.FC<ItemType> = React.memo(({item, onChange, removeItem, colorHandler}) => {
     const [value, setValue] = useState(item.text)
     const [isEditable, setIsEditable] = useState(false)
 
     const debounce = useDebounce(value, 1000)
 
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setValue(e.currentTarget.value)
-    }
+    }, [])
     const onBlurHandler = () => {
         setIsEditable(false)
         colorHandler('')
@@ -36,7 +36,7 @@ export const ItemNote: React.FC<ItemType> = ({item, onChange, removeItem, colorH
         if (debounce !== item.text) {
             onChange(debounce)
         }
-    }, [debounce])
+    }, [debounce, item.text, onChange])
 
     return (
         <div className={css.itemBody}>
@@ -61,4 +61,4 @@ export const ItemNote: React.FC<ItemType> = ({item, onChange, removeItem, colorH
             <span className={css.span} onClick={() => removeItem(item.id, item.tag)}>X</span>
         </div>
     );
-};
+});

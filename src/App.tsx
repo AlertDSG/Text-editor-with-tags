@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import './App.scss';
 import {AddItemForm} from "./components/AddItemForm";
 import {SearchItemForm} from "./components/SearchItemForm";
@@ -64,7 +64,7 @@ function App() {
         filteredState = {...state, data: state.data.filter(d => d.tag === searchValue)}
     }
 
-    const onChangeTodoHandler = (value: string, id: string) => {
+    const onChangeTodoHandler = useCallback((value: string, id: string) => {
         const tag = searchTags(value)
         const oldTag = state.data.filter(e => e.id)[0].tag
         const searchTag = state.tags.find(t => t.tag === tag)
@@ -88,7 +88,7 @@ function App() {
             const tags = oldTag && state.data.filter(t => t.tag === oldTag).length === 1 ? state.tags.filter(t => t.tag !== oldTag) : state.tags
             setState({...state, data, tags})
         }
-    }
+    }, [state])
 
     const removeItem = (id: string, tag: null | string) => {
         const data = state.data.filter(d => d.id !== id)
@@ -99,11 +99,12 @@ function App() {
     const colorHandler = (text: string) => {
         if (!text) {
             setState({...state, tags: state.tags.map(t => t.isActive ? {...t, isActive: false} : t)})
-        }
-        const texts = text.split(' ')
-        for (let i = 0; i < texts.length; i++) {
-            if (state.tags.find(t => t.tag === '#' + texts[i])) {
-                setState({...state, tags: state.tags.map(t => t.tag === '#' + texts[i] ? {...t, isActive: true} : t)})
+        } else {
+            const texts = text.split(' ')
+            for (let i = 0; i < texts.length; i++) {
+                if (state.tags.find(t => t.tag === '#' + texts[i])) {
+                    setState({...state, tags: state.tags.map(t => t.tag === '#' + texts[i] ? {...t, isActive: true} : t)})
+                }
             }
         }
     }
