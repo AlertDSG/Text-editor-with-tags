@@ -65,34 +65,35 @@ function App() {
     }
 
     const onChangeTodoHandler = useCallback((value: string, id: string) => {
+
         const tag = searchTags(value)
-        const oldTag = state.data.filter(e => e.id)[0].tag
+        const oldTag = state.data.find(e => e.id === id)
         const searchTag = state.tags.find(t => t.tag === tag)
+        if (!oldTag) return
         const data = state.data.map(e => e.id === id ? {...e, text: value, tag} : e)
-        if (tag === oldTag) {
+        if (tag === oldTag.tag) {
             setState({...state, data: state.data.map(e => e.id === id ? {...e, text: value} : e)})
-        } else if (tag && !oldTag) {
+        } else if (tag && !oldTag.tag) {
             setState({
                 ...state,
                 data,
                 tags: searchTag ? state.tags : [...state.tags, {tag, isActive: false}]
             })
-        } else if (tag && tag !== oldTag) {
+        } else if (tag && oldTag.tag && tag !== oldTag.tag) {
             setState({
                 ...state,
                 data,
-                tags: searchTag ? state.tags.filter(t => t.tag !== oldTag) : [...state.tags, {tag, isActive: false}]
+                tags: searchTag ? state.tags.filter(t => t.tag !== oldTag.tag) : [...state.tags, {tag, isActive: false}]
             })
-        } else {
-            const data = state.data.map(d => d.id === id ? {...d, tag: null} : d)
-            const tags = oldTag && state.data.filter(t => t.tag === oldTag).length === 1 ? state.tags.filter(t => t.tag !== oldTag) : state.tags
+        } else if (!tag && oldTag) {
+            const tags = data.find(t => t.tag === oldTag.tag) ? state.tags : state.tags.filter(t => t.tag !== oldTag.tag)
             setState({...state, data, tags})
         }
     }, [state])
 
     const removeItem = (id: string, tag: null | string) => {
         const data = state.data.filter(d => d.id !== id)
-        const tags = tag && state.data.filter(t => t.tag === tag).length === 1 ? state.tags.filter(t => t.tag !== tag) : state.tags
+        const tags = tag && state.data.find(t => t.tag === tag) ? state.tags.filter(t => t.tag !== tag) : state.tags
         setState({...state, data, tags})
     }
 
@@ -103,7 +104,10 @@ function App() {
             const texts = text.split(' ')
             for (let i = 0; i < texts.length; i++) {
                 if (state.tags.find(t => t.tag === '#' + texts[i])) {
-                    setState({...state, tags: state.tags.map(t => t.tag === '#' + texts[i] ? {...t, isActive: true} : t)})
+                    setState({
+                        ...state,
+                        tags: state.tags.map(t => t.tag === '#' + texts[i] ? {...t, isActive: true} : t)
+                    })
                 }
             }
         }
