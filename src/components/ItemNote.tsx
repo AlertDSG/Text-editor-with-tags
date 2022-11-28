@@ -27,7 +27,7 @@ export const ItemNote: React.FC<ItemType> = ({
     const [valueTag, setValueTag] = React.useState(tag ? tag : '')
     const [isEditable, setIsEditable] = React.useState(false)
     const [isTag, setIsTag] = React.useState(false)
-    const debounce = useDebounce(value, 1000)
+    const debounce = useDebounce(value, 700)
 
     const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.currentTarget.value)
@@ -55,6 +55,7 @@ export const ItemNote: React.FC<ItemType> = ({
         if (debounce){
             onChange(debounce, id)
         }
+        // eslint-disable-next-line
     }, [debounce, id])
 
     return (
@@ -71,7 +72,6 @@ export const ItemNote: React.FC<ItemType> = ({
                     </p>
                     :
                     <TextField
-                        // value={value}
                         onChange={onChangeHandler}
                         onBlur={onBlurHandler}
                         className={css.input}

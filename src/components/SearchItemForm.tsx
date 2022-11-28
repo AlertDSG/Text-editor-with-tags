@@ -18,6 +18,7 @@ export const SearchItemForm: React.FC<SearchItemFormType> = React.memo(({onChang
 
     useEffect(() => {
             onChange(debounce)
+        // eslint-disable-next-line
     }, [debounce])
 
     return (

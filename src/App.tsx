@@ -32,10 +32,6 @@ function App() {
     const [state, setState] = React.useState<StateType>(initial)
     const [searchValue, setSearchValue] = React.useState('')
 
-    const obj = React.useMemo(() => {
-        return state;
-    }, []);
-
     React.useEffect(() => {
         const localState = localStorage.getItem('state')
         if (localState) {
@@ -67,7 +63,6 @@ function App() {
     }
 
     const onChangeTodoHandler = (text: string, id: string) => {
-        debugger
         const tag = searchTags(text)
         const todo = state.data.find(e => e.id === id)
         if (!todo) return
