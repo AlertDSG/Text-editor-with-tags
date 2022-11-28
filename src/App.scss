@@ -21,6 +21,16 @@
     .tags {
       display: flex;
       margin-top: 25px;
+      gap: 10px;
+      cursor: pointer;
+      .tag {
+        display: inline-block;
+        padding: 5px;
+        border: 1px solid $primaryColor;
+      }
+      .tag:hover {
+        background: $primaryColor;
+      }
     }
 
     @media screen and (max-width: 1042px) {

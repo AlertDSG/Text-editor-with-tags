@@ -1,29 +1,48 @@
-import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
+import React from 'react';
 import css from './ItemNote.module.scss';
-import {DataType} from '../App';
 import {TextField} from './TextField';
 import {useDebounce} from '../common/hooks/useDebounce';
 import SvgComponent from "./SVGComponent";
 
 type ItemType = {
-    item: DataType
-    onChange: (value: string) => void
+    id: string
+    tag: string | null
+    text: string
+    onChange: (value: string, id: string) => void
     removeItem: (Id: string, tag: string | null) => void
     colorHandler: (value: string) => void
+    onChangeTag: (value: string, text: string, id: string, oldTag: string | null) => void
 }
 
-export const ItemNote: React.FC<ItemType> = React.memo(({item, onChange, removeItem, colorHandler}) => {
-    const [value, setValue] = useState(item.text)
-    const [isEditable, setIsEditable] = useState(false)
-
+export const ItemNote: React.FC<ItemType> = ({
+                                                 id,
+                                                 tag,
+                                                 text,
+                                                 onChange,
+                                                 removeItem,
+                                                 colorHandler,
+                                                 onChangeTag
+                                             }) => {
+    const [value, setValue] = React.useState(text)
+    const [valueTag, setValueTag] = React.useState(tag ? tag : '')
+    const [isEditable, setIsEditable] = React.useState(false)
+    const [isTag, setIsTag] = React.useState(false)
     const debounce = useDebounce(value, 1000)
 
-    const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.currentTarget.value)
-    }, [])
+    }
+
     const onBlurHandler = () => {
+
         setIsEditable(false)
         colorHandler('')
+    }
+    const setTagHandler = () => {
+        setIsTag(false)
+        if (valueTag !== null) {
+            onChangeTag(valueTag, text, id, tag)
+        }
     }
 
     const onKeyPressHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -32,33 +51,50 @@ export const ItemNote: React.FC<ItemType> = React.memo(({item, onChange, removeI
         }
     }
 
-    useEffect(() => {
-        if (debounce !== item.text) {
-            onChange(debounce)
+    React.useEffect(() => {
+        if (debounce){
+            onChange(debounce, id)
         }
-    }, [debounce, item.text, onChange])
+    }, [debounce, id])
 
     return (
-        <div className={css.itemBody}>
-            {!isEditable
-                ?
-                <p
-                    className={css.itemText}
-                    onDoubleClick={() => setIsEditable(true)}
-                >
-                    {item.text}
-                    <SvgComponent style={{marginLeft: '25px'}}/>
-                </p>
-                :
-                <TextField
-                    value={value}
-                    onChange={onChangeHandler}
-                    onBlur={onBlurHandler}
-                    className={css.input}
-                    onKeyPress={onKeyPressHandler}
-                />
-            }
-            <span className={css.span} onClick={() => removeItem(item.id, item.tag)}>X</span>
+        <div className={css.item}>
+            <div className={css.itemBody}>
+                {!isEditable
+                    ?
+                    <p
+                        className={css.itemText}
+                        onDoubleClick={() => setIsEditable(true)}
+                    >
+                        {text}
+                        <SvgComponent style={{marginLeft: '25px'}}/>
+                    </p>
+                    :
+                    <TextField
+                        // value={value}
+                        onChange={onChangeHandler}
+                        onBlur={onBlurHandler}
+                        className={css.input}
+                        onKeyPress={onKeyPressHandler}
+                        defaultValue={text}
+                    />
+
+                }
+                <span className={css.span} onClick={() => removeItem(id, tag)}>X</span>
+            </div>
+            {tag && <>
+                {!isTag ?
+                    <h3 className={css.tag}>
+                        <span onDoubleClick={() => setIsTag(true)}>
+                        {tag}
+                        </span>
+                    </h3>
+                    : <TextField
+                        defaultValue={tag}
+                        onBlur={setTagHandler}
+                        onChange={(e) => setValueTag(e.currentTarget.value)}
+                    />}
+            </>}
         </div>
     );
-});
+}

@@ -5,19 +5,20 @@ import {useDebounce} from '../common/hooks/useDebounce';
 
 type SearchItemFormType = {
     onChange: (value: string) => void
+    searchValue: string
 }
 
-export const SearchItemForm: React.FC<SearchItemFormType> = React.memo(({onChange}) => {
-    const [value, setValue] = useState('')
-    const debounce = useDebounce(value, 1000)
+export const SearchItemForm: React.FC<SearchItemFormType> = React.memo(({onChange, searchValue}) => {
+    const [value, setValue] = useState(searchValue)
+    const debounce = useDebounce(value, 700)
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setValue(e.currentTarget.value)
     }
 
     useEffect(() => {
-        onChange(debounce)
-    }, [debounce, onChange])
+            onChange(debounce)
+    }, [debounce])
 
     return (
         <TextField

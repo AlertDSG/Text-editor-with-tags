@@ -8,10 +8,11 @@ type TextFieldType = {
     placeholder?: string
     value?: string
     className?: string
+    defaultValue?: string
 }
 
-export const TextField: React.FC<TextFieldType> = (
-    {onChange, onKeyPress, onBlur, placeholder, value, className}
+export const TextField: React.FC<TextFieldType> = React.memo ((
+    {onChange, onKeyPress, onBlur, placeholder, value, className, defaultValue}
 ) => {
 
     const styleInput = className ? `${css.textField} ${className}` : css.textField
@@ -23,7 +24,8 @@ export const TextField: React.FC<TextFieldType> = (
         onChange={onChange}
         onKeyPress={onKeyPress}
         onBlur={onBlur}
+        defaultValue={defaultValue}
         autoFocus
         className={styleInput}
     />
-};
+});

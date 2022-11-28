@@ -1,38 +1,49 @@
 @import "../common/variables";
 
-.itemBody {
+.item {
   margin: 20px 0;
   min-height: 50px;
   max-width: 700px;
-  padding: 0 15px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  padding: 5px 15px;
   border: 1px solid $primaryColor;
   border-radius: 5px;
   background: $primaryColor;
-  white-space: pre-wrap;
 
-  .itemText {
-    font-size: 18px;
-    line-height: 110%;
-  }
+  .itemBody {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
 
-  .input {
-    height: 100%;
-    font-size: 18px;
-    line-height: 110%;
-    width: 100%;
-    padding-right: 15px;
-  }
+    .itemText {
+      font-size: 18px;
+      line-height: 110%;
+    }
 
-  .span {
-    cursor: pointer;
-  }
+    .input {
+      height: 100%;
+      font-size: 18px;
+      line-height: 110%;
+      width: 100%;
+      padding-right: 15px;
+    }
 
-  @media screen and (max-width: 1042px) {
-    & {
-      height: 30px;
+    .span {
+      cursor: pointer;
     }
   }
+  .tag {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .inputForTag {
+
+  }
+  .tag span {
+    display: inline-block;
+    padding: 5px;
+    border: 1px solid $secondColor;
+  }
+
 }
